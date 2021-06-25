@@ -18,10 +18,11 @@ declare module PhysX {
         static CreateControllerManager(scene: PxScene, lockingEnabled?: boolean): PxControllerManager;
         static CreateCooking(version: number, foundation: PxFoundation, scale: PxCookingParams): PxCooking;
         static CreateFoundation(version: number, allocator: PxDefaultAllocator, errorCallback: PxErrorCallback): PxFoundation;
-        static CreatePhysics(version: number, foundation: PxFoundation, params: PxTolerancesScale): PxPhysics;
+        static CreatePhysics(version: number, foundation: PxFoundation, params: PxTolerancesScale, pvd?: PxPvd): PxPhysics;
         static DefaultCpuDispatcherCreate(numThreads: number): PxDefaultCpuDispatcher;
         static InitExtensions(physics: PxPhysics): boolean;
         static CreateCudaContextManager(foundation: PxFoundation, desc: PxCudaContextManagerDesc): PxCudaContextManager;
+        static CreatePvd(foundation: PxFoundation): PxPvd;
         static D6JointCreate(physics: PxPhysics, actor0: PxRigidActor, localFrame0: PxTransform, actor1: PxRigidActor, localFrame1: PxTransform): PxD6Joint;
         static DistanceJointCreate(physics: PxPhysics, actor0: PxRigidActor, localFrame0: PxTransform, actor1: PxRigidActor, localFrame1: PxTransform): PxDistanceJoint;
         static FixedJointCreate(physics: PxPhysics, actor0: PxRigidActor, localFrame0: PxTransform, actor1: PxRigidActor, localFrame1: PxTransform): PxFixedJoint;
@@ -665,6 +666,8 @@ declare module PhysX {
         clear(flag: PxRigidBodyFlagEnum): void;
     }
     class PxRigidDynamic extends PxRigidBody {
+        setKinematicTarget(destination: PxTransform): void;
+        getKinematicTarget(target: PxTransform): boolean;
         isSleeping(): boolean;
         setSleepThreshold(threshold: number): void;
         getSleepThreshold(): number;
@@ -2395,6 +2398,10 @@ declare module PhysX {
         static getRealAt(base: PxRealPtr, index: number): number;
         static getContactPairAt(base: PxContactPair, index: number): PxContactPair;
         static getTriggerPairAt(base: PxTriggerPair, index: number): PxTriggerPair;
+        static getContactPairHeaderAt(base: PxContactPairHeader, index: number): PxContactPairHeader;
+        static getControllerShapeHitAt(base: PxControllerShapeHit, index: number): PxControllerShapeHit;
+        static getShapeAFromContactPair(base: PxContactPair): PxShape;
+        static getShapeBFromContactPair(base: PxContactPair): PxShape;
         static getVec3At(base: PxVec3, index: number): PxVec3;
         static voidToU8ConstPtr(voidPtr: unknown): PxU8ConstPtr;
         static voidToU16ConstPtr(voidPtr: unknown): PxU16ConstPtr;
@@ -2506,5 +2513,32 @@ declare module PhysX {
         data(): PxVehicleWheelsPtr;
         size(): number;
         push_back(value: PxVehicleWheels): void;
+    }
+    class PxPvdTransport {
+        connect(): boolean;
+        disconnect(): void;
+        isConnected(): boolean;
+    }
+    class SimplePvdTransport extends PxPvdTransport {
+        constructor();
+        send(inBytes: number, inLength: number): void;
+    }
+    class JSPvdTransport extends SimplePvdTransport {
+        constructor();
+    }
+    enum PxPvdInstrumentationFlagEnum {
+        'DEBUG',
+        'PROFILE',
+        'MEMORY',
+        'ALL'
+    }
+    class PxPvdInstrumentationFlags {
+        constructor(flags: number);
+        isSet(flag: PxPvdInstrumentationFlagEnum): boolean;
+        set(flag: PxPvdInstrumentationFlagEnum): void;
+        clear(flag: PxPvdInstrumentationFlagEnum): void;
+    }
+    class PxPvd {
+        connect(transport: PxPvdTransport, flags: PxPvdInstrumentationFlags): boolean;
     }
 }
