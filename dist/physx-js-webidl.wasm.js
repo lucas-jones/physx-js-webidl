@@ -1,14 +1,14 @@
+export let Instance;
 
-
-var PhysX = (function() {
-  var _scriptDir = typeof document !== 'undefined' && document.currentScript ? document.currentScript.src : undefined;
-  if (typeof __filename !== 'undefined') _scriptDir = _scriptDir || __filename;
+var SetupPhysX = (function() {
+  var _scriptDir = import.meta.url;
+  
   return (
-function(PhysX) {
-  PhysX = PhysX || {};
+function(SetupPhysX) {
+  SetupPhysX = SetupPhysX || {};
 
 
-d
+
 // The Module object: Our interface to the outside world. We import
 // and export values on it. There are various ways Module can be used:
 // 1. Not defined. We create it here
@@ -22,7 +22,7 @@ d
 // after the generated code, you will need to define   var Module = {};
 // before the code. Then that object will be used in the code, and you
 // can continue to use Module afterwards as well.
-var Module = typeof PhysX !== 'undefined' ? PhysX : {};
+var Module = typeof SetupPhysX !== 'undefined' ? SetupPhysX : {};
 
 
 // Set up the promise that indicates the Module is initialized
@@ -32354,18 +32354,11 @@ PxPvd.prototype['connect'] = PxPvd.prototype.connect = /** @suppress {undefinedV
   else addOnPreMain(setupEnums);
 })();
 
-// Reassign global PhysX to the loaded module:
-this['PhysX'] = Module;
+Instance = Module;
 
 
-  return PhysX.ready
+  return SetupPhysX.ready
 }
 );
 })();
-if (typeof exports === 'object' && typeof module === 'object')
-      module.exports = PhysX;
-    else if (typeof define === 'function' && define['amd'])
-      define([], function() { return PhysX; });
-    else if (typeof exports === 'object')
-      exports["PhysX"] = PhysX;
-    
+export default SetupPhysX;
