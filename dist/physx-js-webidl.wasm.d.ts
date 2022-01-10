@@ -2084,6 +2084,10 @@ export declare namespace Instance {
     class PxRigidActorExt {
         static createExclusiveShape(actor: PxRigidActor, geometry: PxGeometry, material: PxMaterial, flags?: PxShapeFlags): PxShape;
     }
+    class PxShapeExt {
+        static getGlobalPose(shape: PxShape, actor: PxRigidActor): PxTransform;
+        static getWorldBounds(shape: PxShape, actor: PxRigidActor, inflation?: float): PxBounds3;
+    }
     class PxRigidBodyExt {
         static updateMassAndInertia(body: PxRigidBody, density: number, massLocalPose?: PxVec3, includeNonSimShapes?: boolean): boolean;
         static setMassAndUpdateInertia(body: PxRigidBody, mass: number, massLocalPose?: PxVec3, includeNonSimShapes?: boolean): boolean;
